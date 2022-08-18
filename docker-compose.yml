@@ -1,0 +1,37 @@
+services:
+  frontend:
+    image: mern-space/client
+    build: 
+      dockerfile: Dockerfile
+      context: ./client
+    ports:
+      - "3000:3000"
+    networks:
+      - front-tier
+      - back-tier
+
+  backend:
+    image: mern-space/server
+    container_name: mern-backend
+    build: 
+      dockerfile: Dockerfile
+      context: ./
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend-database
+    networks:
+      - back-tier
+
+  backend-database:
+    image: mongo
+    container_name: mern-database
+#    ports:
+#      - "27017:27017"
+    networks:
+      - back-tier
+
+networks:
+  # The presence of these objects is sufficient to define them
+  front-tier: {}
+  back-tier: {}
